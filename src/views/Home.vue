@@ -2,34 +2,34 @@
   <div>
     <div class="home-nav">
       <h1 class="text-center">Itens encontrados</h1>
-      <div class="data-filter">
-        <div><button class="btn btn-small btn-primary data-filter-item todos">Todos</button></div>
-        <div>
-          <button class="btn btn-small btn-primary data-filter-item">Chave</button>
-          <button class="btn btn-small btn-primary data-filter-item">Fone</button>
-          <button class="btn btn-small btn-primary data-filter-item">Carregador</button>
+      <div class="retangulo">
+        <div class="data-filter">
+          <div><button class="btn btn-small btn-primary data-filter-item todos clicked"
+              @click="checkFilter(0, 'todos')">Todos</button></div>
+          <div>
+            <button v-for="(filter, index) in filters" :key="index" @click="checkFilter(index + 1, filter)"
+              class="btn btn-small btn-primary data-filter-item">{{ filter }}</button>
+          </div>
+        </div>
+      
+
+
+      <div class="card-columns">
+        <div class="card" v-for="(card, index) in cards" :key="index" v-show="card.show">
+          <img class="card-img-top" :src="card.img" :alt="card.alt">
+          <div class="card-body">
+            <h5 class="card-title">{{ card.title }}</h5>
+            <p class="card-text">{{ card.text }}</p>
+          </div>
+          <div class="card-footer">
+            <small class="text-muted">{{ card.date }}</small>
+            <button v-if="card.solicitado == null" @click="solicitarItem(index)" v-show="user"
+              class="btn btn-primary">Solicitar</button>
+            <button v-else v-show="user" class="btn btn-primary">Solicitado</button>
+          </div>
         </div>
       </div>
-
-
-
-
-
     </div>
-
-
-    <div class="card-columns">
-      <div class="card" v-for="(card, index) in cards" :key="index">
-        <img class="card-img-top" :src="card.img" :alt="card.alt">
-        <div class="card-body">
-          <h5 class="card-title">{{ card.title }}</h5>
-          <p class="card-text">{{ card.text }}</p>
-        </div>
-        <div class="card-footer">
-          <small class="text-muted">{{ card.date }}</small>
-          <button @click="solicitarItem(index)" v-show="user" class="btn btn-primary">Solicitar</button>
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -43,58 +43,119 @@ export default {
   data() {
     return {
       cards: [
-        {
+        /**{
           img: '/img/logo.png',
           title: 'Item 1',
           text: 'item um muito foda achado em algum canto',
           date: '20/12/2023',
           alt: 'Card image cap',
-        },
-        {
-          img: '/img/logo.png',
-          title: 'Item 2',
-          text: 'item dois muito foda achado em algum canto',
-          date: '26/04/2013',
-          alt: 'Card image cap',
-        },
-        {
-          img: '/img/logo.png',
-          title: 'Item 3',
-          text: 'item três muito foda achado em algum canto',
-          date: '26/04/2013',
-          alt: 'Card image cap',
-        },
-        {
-          img: '/img/logo.png',
-          title: 'Item 2',
-          text: 'item quatro muito foda achado em algum canto',
-          date: '26/04/2013',
-          alt: 'Card image cap',
-        },
-      ]
+        }, */
+        
+
+      ],
+      filters: ['Chave', 'Fone', 'Carregador']
+
     }
   },
   methods: {
     solicitarItem(index) {
-      console.log('solicitar item', index);
+      const info = {
+        "data": {
+          "title": this.cards[index].title,
+          "img": this.cards[index].img,
+          "text": this.cards[index].text,
+          "date": this.cards[index].original_date,
+          "solicitado": this.user.username,
+          "tipo": this.cards[index].tipo,
+        }
+      }
+
+
+      const req = fetch(`http://localhost:1337/api/items/${index + 1}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + this.user.jwt,
+        },
+        body: JSON.stringify(info),
+      }).then(async (response) => {
+        const data = await response.json();
+        console.log(data);
+        this.cards = [];
+        this.getItems();
+
+      });
+    },
+    async getItems() {
+      const req = fetch('http://localhost:1337/api/items', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }).then(async (response) => {
+        if (response.status === 200) {
+          const data = await response.json();
+          console.log(data.data);
+          for (let i = 0; i < data.data.length; i++) {
+            const card = {
+              img: data.data[i].attributes.img,
+              title: data.data[i].attributes.title,
+              text: data.data[i].attributes.text,
+              solicitado: data.data[i].attributes.solicitado,
+              date: new Date(data.data[i].attributes.date).toLocaleDateString(),
+              original_date: data.data[i].attributes.date,
+              tipo: data.data[i].attributes.tipo,
+              alt: 'Item Encontrado',
+              show: true,
+            };
+            this.cards.push(card);
+          }
+        }
+      });
+    },
+    checkFilter(index, filter) {
+      filter = filter.toLowerCase();
+      const buttons = document.querySelectorAll('.data-filter-item');
+      buttons.forEach((button) => {
+        button.classList.remove('clicked');
+      });
+      buttons[index].classList.add('clicked');
+      if (filter === 'todos') {
+        for (let i = 0; i < this.cards.length; i++) {
+          this.cards[i].show = true;
+        }
+        return;
+      }
+      for (let i = 0; i < this.cards.length; i++) {
+        if (this.cards[i].tipo !== filter) {
+          this.cards[i].show = false;
+        } else {
+          this.cards[i].show = true;
+
+        }
+      }
     }
+  },
+  mounted() {
+    this.getItems();
   }
 }
 </script>
 
 <style scoped>
 .home-nav {
-  margin-top: 10px;
+  margin: 20px auto;
 }
 
 .data-filter {
   display: flex;
   justify-content: space-between;
-  width: 1200px;
+  max-width: 1200px;
   margin: auto;
+  padding: 0 10px;
 }
 
-.data-filter-item{
+.data-filter-item {
   min-width: 10%;
   margin: 3px;
   margin-bottom: 50px;
@@ -106,19 +167,32 @@ export default {
   max-width: 1200px;
   min-height: 81vh;
   display: grid;
-  grid-template-columns: 33% 33% 33%;
+  grid-template-columns: 25% 25% 25% 25%;
+
+
+}
+
+.retangulo {
+  border: 1px solid rgba(0, 0, 0, 0.063);
+  max-width: 1200px;
+  margin: 25px auto;
+  padding: 15px;
+  border-radius: 15px;
+  background-color: #ffffff58;
+  box-shadow: 0 15px 20px rgba(0, 0, 0, .2);
+  
 }
 
 .card {
   padding: 10px;
-  height: 500px;
+  height: 400px;
 }
 
 .card img {
   display: block;
   margin: auto;
-  max-width: 200px;
-  max-height: 200px;
+  max-width: 100%;
+  height: 200px;
 }
 
 .card-footer {
@@ -134,6 +208,11 @@ export default {
 .card-text {
   max-width: 100%;
   margin-bottom: 20px;
+}
+
+.clicked {
+  background-color: #0069d9;
+  color: #fff;
 }
 
 @media screen and (max-width: 860px) {

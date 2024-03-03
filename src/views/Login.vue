@@ -1,5 +1,6 @@
 <template>
     <div class="login-div">
+        <Message :msg="msg" v-show="msg" />
         <h1 class="text-center">Login</h1>
         <form>
             <!-- Email input -->
@@ -37,21 +38,67 @@
         </form>
     </div>
 </template>
-  
+
 <script>
+import Message from '../components/Message.vue'
+
 export default {
     name: 'Login',
     props: {
         user: Object,
     },
-    methods: {
-        logar() {
-            if (this.email === 'jogas@gmail.com' && this.senha === '123') {
-                this.$emit('logar', { username: 'jogas' });
-                this.$router.push('/');
-            }
+    components: {
+        Message,
+    },
+    data() {
+        return {
+            msg: '',
         }
-    },mounted() {
+    },
+    methods: {
+        async logar() {
+            const req = await fetch('http://localhost:1337/api/auth/local', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    "identifier": this.email,
+                    "password": this.senha,
+                }),
+            }).then(async (response) => {
+                if (response.status === 200) {
+
+                    const data = await response.json()
+                    console.log(data)
+                    const info = {
+                        email: data.user.email,
+                        username: data.user.username,
+                        id: data.user.id,
+                        jwt: data.jwt,
+                        img: data.user.img,
+                    }
+
+                    this.$emit('logar', info);
+                    this.$router.push('/');
+                    localStorage.setItem('user', JSON.stringify(info));
+                    
+                } else if(response.status === 400) {
+                    this.email = ''
+                    this.senha = ''
+                    this.msg = 'Usuario ou senha invalidos'
+                    setTimeout(() => {
+                        this.msg = ''
+                    }, 5000);
+
+                }else{
+                    console.log('Erro desconhecido')
+                }
+            });
+            
+
+        }
+    }, mounted() {
         if (this.user) {
             this.$router.push('/');
         }
@@ -59,7 +106,7 @@ export default {
 
 }
 </script>
-  
+
 
 <style scoped>
 .login-div {

@@ -1,17 +1,27 @@
 <template>
     <div>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <h1>Usuário</h1>
-                </div>
-            </div>
-        </div>
+        <h1>Usuario</h1>
+        <button @click="logout">Logout</button>
     </div>
 </template>
 
 <script>
-export default {
-    
-}
+    export default {
+        name: 'User',
+        props: {
+            user: Object,
+        },
+        methods: {
+            logout() {
+                this.$emit('logout');
+                localStorage.removeItem('user');
+                this.$router.push('/');
+            }
+        },
+        mounted() {
+            if (!this.user) {
+                this.$router.push('/login');
+            }
+        },
+    }
 </script>
