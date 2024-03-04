@@ -1,63 +1,57 @@
-# Manga Store
+# 🚀 Getting started with Strapi
 
-Uma loja online destinada a vendas de Mangás.
+Strapi comes with a full featured [Command Line Interface](https://docs.strapi.io/dev-docs/cli) (CLI) which lets you scaffold and manage your project in seconds.
 
-Para executar este projeto siga os passos descritos no arquivo [passo-a-passo](passo-a-passo.md)
+### `develop`
 
-## Membros da equipe
+Start your Strapi application with autoReload enabled. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-develop)
 
-Linyker Vinicius Gomes Barbosa, 556280, Ciencia da computação
+```
+npm run develop
+# or
+yarn develop
+```
 
-## Papéis ou tipos de usuário da aplicação
+### `start`
 
-- Usuário não registrado
-- Usuário registrado
-- Administrador
+Start your Strapi application with autoReload disabled. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-start)
 
-## Entidades ou tabelas do sistema
+```
+npm run start
+# or
+yarn start
+```
 
-- User
-- Item
-- Category
+### `build`
 
-## Principais funcionalidades da aplicação
+Build your admin panel. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-build)
 
-- Usuário não registrador poderão ver os mangá e os comentários feitos por usuários registrados.
-- Usuário registrador pode listar os mangás e seus detalhes, assim como usuários não registrados. 
-Adicionalmente, eles podem escrever comentários sobre os mangás.
-- O adminstrador da loja pode: adicionar, remover e editar os mangás.
+```
+npm run build
+# or
+yarn build
+```
 
-## Tecnologias e frameworks utilizados
+## ⚙️ Deployment
 
-**Frontend:**
+Strapi gives you many possible deployment options for your project including [Strapi Cloud](https://cloud.strapi.io). Browse the [deployment section of the documentation](https://docs.strapi.io/dev-docs/deployment) to find the best solution for your use case.
 
-- VueJS v3.0, Vue-Router e Pinia.
-- Axios
+## 📚 Learn more
 
-**Backend:**
+- [Resource center](https://strapi.io/resource-center) - Strapi resource center.
+- [Strapi documentation](https://docs.strapi.io) - Official Strapi documentation.
+- [Strapi tutorials](https://strapi.io/tutorials) - List of tutorials made by the core team and the community.
+- [Strapi blog](https://strapi.io/blog) - Official Strapi blog containing articles made by the Strapi team and the community.
+- [Changelog](https://strapi.io/changelog) - Find out about the Strapi product updates, new features and general improvements.
 
-- Strapi
+Feel free to check out the [Strapi GitHub repository](https://github.com/strapi/strapi). Your feedback and contributions are welcome!
 
+## ✨ Community
 
-## Operações implementadas para cada entidade da aplicação
+- [Discord](https://discord.strapi.io) - Come chat with the Strapi community including the core team.
+- [Forum](https://forum.strapi.io/) - Place to discuss, ask questions and find answers, show your Strapi project and get feedback or just talk with other Community members.
+- [Awesome Strapi](https://github.com/strapi/awesome-strapi) - A curated list of awesome things related to Strapi.
 
+---
 
-| Entidade| Criação | Leitura | Atualização | Remoção |
-| --- | --- | --- | --- | --- |
-| User |  |  |  |  |
-| Item | X  | X |  X | X |
-| Category | X |  X  |  |  |
-
-> Lembre-se que é necessário implementar o CRUD de pelo menos duas entidades.
-
-## Rotas da API REST utilizadas
-
-| Método HTTP | URL |
-| --- | --- |
-| POST | /auth/local |
-| GET | /users/me |
-| GET | /api/mangas |
-| GET | /api/mangas/{id} |
-| POST | /api/mangas |
-| PUT | /api/mangas/{id} |
-| DELETE | /api/mangas/{id} |
+<sub>🤫 Psst! [Strapi is hiring](https://strapi.io/careers).</sub>

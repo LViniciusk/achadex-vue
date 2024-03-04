@@ -1,19 +1,63 @@
-# achadex-vue
+# Manga Store
 
-## Project setup
-```
-npm install
-```
+Uma loja online destinada a vendas de Mangás.
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+Para executar este projeto siga os passos descritos no arquivo [passo-a-passo](passo-a-passo.md)
 
-### Compiles and minifies for production
-```
-npm run build
-```
+## Membros da equipe
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Linyker Vinicius Gomes Barbosa, 556280, Ciencia da computação
+
+## Papéis ou tipos de usuário da aplicação
+
+- Usuário não registrado
+- Usuário registrado
+- Administrador
+
+## Entidades ou tabelas do sistema
+
+- User
+- Item
+- Category
+
+## Principais funcionalidades da aplicação
+
+- Usuário não registrador poderão ver os mangá e os comentários feitos por usuários registrados.
+- Usuário registrador pode listar os mangás e seus detalhes, assim como usuários não registrados. 
+Adicionalmente, eles podem escrever comentários sobre os mangás.
+- O adminstrador da loja pode: adicionar, remover e editar os mangás.
+
+## Tecnologias e frameworks utilizados
+
+**Frontend:**
+
+- VueJS v3.0, Vue-Router e Pinia.
+- Axios
+
+**Backend:**
+
+- Strapi
+
+
+## Operações implementadas para cada entidade da aplicação
+
+
+| Entidade| Criação | Leitura | Atualização | Remoção |
+| --- | --- | --- | --- | --- |
+| User |  |  |  |  |
+| Item | X  | X |  X | X |
+| Category | X |  X  |  |  |
+
+> Lembre-se que é necessário implementar o CRUD de pelo menos duas entidades.
+
+## Rotas da API REST utilizadas
+
+| Método HTTP | URL |
+| --- | --- |
+| POST | /auth/local |
+| GET | /users/me |
+| GET | /api/mangas |
+| GET | /api/mangas/{id} |
+| POST | /api/mangas |
+| PUT | /api/mangas/{id} |
+| DELETE | /api/mangas/{id} |
