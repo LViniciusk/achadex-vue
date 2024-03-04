@@ -102,6 +102,7 @@ export default {
               title: data.data[i].attributes.title,
               text: data.data[i].attributes.text,
               solicitado: data.data[i].attributes.solicitado,
+              resgatado: data.data[i].attributes.resgatado,
               date: new Date(data.data[i].attributes.date).toLocaleDateString(),
               original_date: data.data[i].attributes.date,
               tipo: data.data[i].attributes.tipo,

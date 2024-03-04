@@ -388,6 +388,7 @@ export interface ApiItemItem extends Schema.CollectionType {
     img: Attribute.String & Attribute.Required;
     tipo: Attribute.String & Attribute.DefaultTo<'todos'>;
     solicitado: Attribute.String;
+    resgatado: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<'api::item.item', 'oneToOne', 'admin::user'> &

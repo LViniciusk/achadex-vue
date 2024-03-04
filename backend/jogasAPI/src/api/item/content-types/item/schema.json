@@ -36,6 +36,9 @@
     },
     "solicitado": {
       "type": "string"
+    },
+    "resgatado": {
+      "type": "string"
     }
   }
 }
