@@ -1,4 +1,4 @@
-# Manga Store
+# Achadex
 
 Uma loja online destinada a vendas de Mangás.
 
