@@ -5,14 +5,14 @@
         <form>
             <!-- Email input -->
             <div class="form-outline mb-4">
-                <input v-model="email" type="email" id="form2Example1" class="form-control" />
-                <label class="form-label" for="form2Example1">Email address</label>
+                <input v-model="email" type="email" id="email" class="form-control" />
+                <label class="form-label" for="email">Email address</label>
             </div>
 
             <!-- Password input -->
             <div class="form-outline mb-4">
-                <input v-model="senha" type="password" id="form2Example2" class="form-control" />
-                <label class="form-label" for="form2Example2">Password</label>
+                <input v-model="senha" type="password" id="pass" class="form-control" />
+                <label class="form-label" for="pass">Password</label>
             </div>
 
             <!-- 2 column grid layout for inline styling -->
@@ -20,8 +20,8 @@
                 <div class="col d-flex justify-content-center">
                     <!-- Checkbox -->
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="form2Example31" checked />
-                        <label class="form-check-label" for="form2Example31"> Remember me </label>
+                        <input class="form-check-input" type="checkbox" value="" id="remember" checked />
+                        <label class="form-check-label" for="remember"> Remember me </label>
                     </div>
                 </div>
 
@@ -65,23 +65,40 @@ export default {
                 body: JSON.stringify({
                     "identifier": this.email,
                     "password": this.senha,
+                    
+                    
                 }),
             }).then(async (response) => {
                 if (response.status === 200) {
 
                     const data = await response.json()
                     console.log(data)
+                    const req = await fetch('http://localhost:1337/api/users/me?populate=role', {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + data.jwt,
+                        },
+                    })
+                    const udata = await req.json()
+                    console.log(udata)
+
+
+
                     const info = {
                         email: data.user.email,
                         username: data.user.username,
                         id: data.user.id,
                         jwt: data.jwt,
                         img: data.user.img,
+                        role: udata.role.name,
                     }
-
+                    
                     this.$emit('logar', info);
                     this.$router.push('/');
-                    localStorage.setItem('user', JSON.stringify(info));
+
+                    if(document.getElementById("remember").checked) localStorage.setItem('user', JSON.stringify(info));
+                    
                     
                 } else if(response.status === 400) {
                     this.email = ''

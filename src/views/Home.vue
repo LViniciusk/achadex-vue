@@ -67,6 +67,7 @@ export default {
           "date": this.cards[index].original_date,
           "solicitado": this.user.username,
           "tipo": this.cards[index].tipo,
+          "resgatado": null,
         }
       }
 

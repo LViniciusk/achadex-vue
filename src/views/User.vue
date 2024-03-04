@@ -6,11 +6,11 @@
             </div>
             <div class="profile-content">
                 <div class="profile-card">
-                    <div class="card profile">
+                    <div class="card profile" v-if="user">
                         <img v-if="user" class="card-img-top profile-img" :src="user.img" alt="Foto de perfil">
                         <div class="card-body">
-                            <h5 v-if="user"  class="card-title">{{ user.username }}</h5>
-                            <p class="card-text"></p>
+                            <h5 v-if="user" class="card-title">{{ user.username }}</h5>
+                            <p v-if="user.role === 'Admin'" class="card-text">{{ user.role }}</p>
 
                         </div>
                         <div class="card-footer">
@@ -36,6 +36,14 @@
                                 <div class="card-text">
                                     <p>{{ card.text }}</p>
                                     <p>Data de encontro: {{ card.date }}</p>
+                                    <div class="admin-options" v-if="(this.user.role === 'Admin')">
+                                        <p v-if="(!card.resgatado)">Solicitado por: <strong>{{ card.solicitado
+                                                }}</strong></p>
+                                        <p v-else>Resgatado por: <strong>{{ card.resgatado }}</strong></p>
+                                        <button v-show="!card.resgatado" class="btn btn-primary"
+                                            @click="resgatar(index)">Resgatar</button>
+                                    </div>
+
                                 </div>
                             </div>
 
@@ -105,33 +113,75 @@ export default {
                 button.classList.remove('clicked');
             });
             buttons[index].classList.add('clicked');
-            if (this.type[index] === 'Solicitados') {
-                for (let i = 0; i < this.cards.length; i++) {
-                    this.cards[i].show = (this.cards[i].solicitado === this.user.username);
+
+            if (this.user.role === 'Admin') {
+                if (this.typetext === 'Solicitados') {
+                    for (let i = 0; i < this.cards.length; i++) {
+                        this.cards[i].show = (this.cards[i].solicitado && !this.cards[i].resgatado);
+                    }
+                } else if (this.typetext === 'Resgatados') {
+
+                    for (let i = 0; i < this.cards.length; i++) {
+                        this.cards[i].show = (this.cards[i].resgatado);
+                    }
                 }
-            }else if(this.type[index] === 'Resgatados'){
+                return;
+            }
+            if (this.typetext === 'Solicitados') {
+                for (let i = 0; i < this.cards.length; i++) {
+                    this.cards[i].show = (this.cards[i].solicitado === this.user.username && !this.cards[i].resgatado);
+                }
+            } else if (this.typetext === 'Resgatados') {
                 for (let i = 0; i < this.cards.length; i++) {
                     this.cards[i].show = (this.cards[i].resgatado === this.user.username);
                 }
             }
 
-        }
+
+
+        },
+        resgatar(index) {
+            const info = {
+                "data": {
+                    "title": this.cards[index].title,
+                    "img": this.cards[index].img,
+                    "text": this.cards[index].text,
+                    "date": this.cards[index].original_date,
+                    "solicitado": this.cards[index].solicitado,
+                    "tipo": this.cards[index].tipo,
+                    "resgatado": this.cards[index].solicitado,
+                }
+            }
+
+
+            const req = fetch(`http://localhost:1337/api/items/${index + 1}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + this.user.jwt,
+                },
+                body: JSON.stringify(info),
+            }).then(async (response) => {
+                const data = await response.json();
+                console.log(data);
+                this.cards = [];
+                this.getItems();
+
+            });
+        },
 
     },
     mounted() {
         if (!this.user) {
             this.$router.push('/login');
         }
-        this.trocar(0);
         this.getItems();
+        this.trocar(0);
     },
 }
 </script>
 
 <style scoped>
-
-
-
 .user-container {
     margin: 25px;
     min-height: 75vh;
@@ -161,7 +211,7 @@ h1 {
 .profile {
     padding: 10px;
     width: 300px;
-    height: 250px;
+    height: 300px;
     box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
 }
 
@@ -242,5 +292,21 @@ h1 {
 
 .button-group button {
     margin-right: 4px;
+}
+
+.admin-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
+    border: 1px solid black;
+    width: 400px;
+    margin: auto;
+    padding: 5px;
+    border-radius: 0.25rem;
+}
+
+.admin-options p {
+    margin: 0px;
 }
 </style>
