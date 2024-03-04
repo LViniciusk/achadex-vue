@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="user-container">
+        <div class="user-container" v-if="user">
             <div class="profile-text">
                 <h1>Perfil de Usuario</h1>
             </div>
@@ -98,7 +98,7 @@ export default {
                             original_date: data.data[i].attributes.date,
                             tipo: data.data[i].attributes.tipo,
                             alt: 'Item Encontrado',
-                            show: (data.data[i].attributes.solicitado === this.user.username),
+                            show: ((data.data[i].attributes.solicitado === this.user.username && !data.data[i].attributes.resgatado)|| (this.user.role === 'Admin' && data.data[i].attributes.solicitado && !data.data[i].attributes.resgatado)),
                         };
                         this.cards.push(card);
 
@@ -106,7 +106,7 @@ export default {
                 }
             });
         },
-        trocar(index) {
+        async trocar(index) {
             this.typetext = this.type[index];
             const buttons = document.querySelectorAll('.profile-btn');
             buttons.forEach((button) => {
@@ -133,7 +133,7 @@ export default {
                 }
             } else if (this.typetext === 'Resgatados') {
                 for (let i = 0; i < this.cards.length; i++) {
-                    this.cards[i].show = (this.cards[i].resgatado === this.user.username);
+                    this.cards[i].show = (this.cards[i].resgatado === this.user.username) ;
                 }
             }
 
@@ -175,8 +175,9 @@ export default {
         if (!this.user) {
             this.$router.push('/login');
         }
-        this.getItems();
+        this.getItems()
         this.trocar(0);
+
     },
 }
 </script>

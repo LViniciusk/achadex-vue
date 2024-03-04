@@ -42,18 +42,8 @@ export default {
   },
   data() {
     return {
-      cards: [
-        /**{
-          img: '/img/logo.png',
-          title: 'Item 1',
-          text: 'item um muito foda achado em algum canto',
-          date: '20/12/2023',
-          alt: 'Card image cap',
-        }, */
-        
-
-      ],
-      filters: ['Chave', 'Fone', 'Carregador']
+      cards: [],
+      filters: []
 
     }
   },
@@ -109,11 +99,29 @@ export default {
               tipo: data.data[i].attributes.tipo,
               alt: 'Item Encontrado',
               show: true,
+              category: data.data[i].attributes.category,
             };
             this.cards.push(card);
           }
         }
       });
+      this.filters=[];
+      const Creq = fetch('http://localhost:1337/api/categories', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }).then(async (response) => {
+        if (response.status === 200) {
+          const data = await response.json();
+          console.log(data.data);
+          for (let i = 0; i < data.data.length; i++) {
+            const category = data.data[i].attributes.nome;
+            this.filters.push(category);
+          }
+        }
+      });
+      
     },
     checkFilter(index, filter) {
       filter = filter.toLowerCase();

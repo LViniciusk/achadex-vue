@@ -362,6 +362,36 @@ export interface AdminTransferTokenPermission extends Schema.CollectionType {
   };
 }
 
+export interface ApiCategoryCategory extends Schema.CollectionType {
+  collectionName: 'categories';
+  info: {
+    singularName: 'category';
+    pluralName: 'categories';
+    displayName: 'Category';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    nome: Attribute.String & Attribute.Required & Attribute.Unique;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::category.category',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::category.category',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiItemItem extends Schema.CollectionType {
   collectionName: 'items';
   info: {
@@ -389,6 +419,11 @@ export interface ApiItemItem extends Schema.CollectionType {
     tipo: Attribute.String & Attribute.DefaultTo<'todos'>;
     solicitado: Attribute.String;
     resgatado: Attribute.String;
+    category: Attribute.Relation<
+      'api::item.item',
+      'oneToOne',
+      'api::category.category'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<'api::item.item', 'oneToOne', 'admin::user'> &
@@ -829,6 +864,7 @@ declare module '@strapi/types' {
       'admin::api-token-permission': AdminApiTokenPermission;
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
+      'api::category.category': ApiCategoryCategory;
       'api::item.item': ApiItemItem;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;
