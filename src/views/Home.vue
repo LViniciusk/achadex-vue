@@ -11,25 +11,26 @@
               class="btn btn-small btn-primary data-filter-item">{{ filter }}</button>
           </div>
         </div>
-      
 
 
-      <div class="card-columns">
-        <div class="card" v-for="(card, index) in cards" :key="index" v-show="card.show">
-          <img class="card-img-top" :src="card.img" :alt="card.alt">
-          <div class="card-body">
-            <h5 class="card-title">{{ card.title }}</h5>
-            <p class="card-text">{{ card.text }}</p>
-          </div>
-          <div class="card-footer">
-            <small class="text-muted">{{ card.date }}</small>
-            <button v-if="card.solicitado == null" @click="solicitarItem(index)" v-show="user"
-              class="btn btn-primary">Solicitar</button>
-            <button v-else v-show="user" class="btn btn-primary">Solicitado</button>
+
+        <div class="card-columns">
+          <div class="card" v-for="(card, index) in cards" :key="index" v-show="card.show">
+            <img class="card-img-top" :src="card.img" :alt="card.alt">
+            <div class="card-body">
+              <h5 class="card-title">{{ card.title }}</h5>
+              <p class="card-text">{{ card.text }}</p>
+            </div>
+            <div class="card-footer">
+              <small class="text-muted">{{ card.date }}</small>
+              <p v-if="card.resgatado" class=" m-0">Resgatado</p>
+              <p v-if="!card.resgatado && card.solicitado" class="m-0">Solicitado</p>
+              <button v-if="!card.resgatado && !card.solicitado" v-show="user" @click="solicitarItem(index)"
+                class="btn btn-primary">Solicitar</button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
     </div>
   </div>
 </template>
@@ -105,7 +106,7 @@ export default {
           }
         }
       });
-      this.filters=[];
+      this.filters = [];
       const Creq = fetch('http://localhost:1337/api/categories', {
         method: 'GET',
         headers: {
@@ -121,7 +122,7 @@ export default {
           }
         }
       });
-      
+
     },
     checkFilter(index, filter) {
       filter = filter.toLowerCase();
@@ -190,7 +191,7 @@ export default {
   border-radius: 15px;
   background-color: #ffffff58;
   box-shadow: 0 15px 20px rgba(0, 0, 0, .2);
-  
+
 }
 
 .card {

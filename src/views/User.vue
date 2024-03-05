@@ -33,17 +33,24 @@
                                 <div class="card-title udl">
                                     <p>{{ card.title }}</p>
                                 </div>
-                                <div class="card-text">
-                                    <p>{{ card.text }}</p>
-                                    <p>Data de encontro: {{ card.date }}</p>
+                                <div class="card-body-admin">
+                                    <div class="card-text">
+                                        <p>{{ card.text }}</p>
+                                        <p>Data de encontro: {{ card.date }}</p>
+                                    </div>
                                     <div class="admin-options" v-if="(this.user.role === 'Admin')">
                                         <p v-if="(!card.resgatado)">Solicitado por: <strong>{{ card.solicitado
                                                 }}</strong></p>
                                         <p v-else>Resgatado por: <strong>{{ card.resgatado }}</strong></p>
-                                        <button v-show="!card.resgatado" class="btn btn-primary"
-                                            @click="resgatar(index)">Resgatar</button>
+                                        <div class="admin-btn-op">
+                                            <button v-show="!card.resgatado" class="btn btn-primary"
+                                                @click="resgatar(index)">Resgatar</button>
+                                            <button v-show="!card.resgatado" class="btn btn-danger"
+                                                @click="excluirSolicitacao(index)">Excluir solicitação</button>
+                                            <button v-show="card.resgatado" class="btn btn-danger"
+                                                @click="excluirResgate(index)">Cancelar resgate</button>
+                                        </div>
                                     </div>
-
                                 </div>
                             </div>
 
@@ -98,7 +105,7 @@ export default {
                             original_date: data.data[i].attributes.date,
                             tipo: data.data[i].attributes.tipo,
                             alt: 'Item Encontrado',
-                            show: ((data.data[i].attributes.solicitado === this.user.username && !data.data[i].attributes.resgatado)|| (this.user.role === 'Admin' && data.data[i].attributes.solicitado && !data.data[i].attributes.resgatado)),
+                            show: ((data.data[i].attributes.solicitado === this.user.username && !data.data[i].attributes.resgatado) || (this.user.role === 'Admin' && data.data[i].attributes.solicitado && !data.data[i].attributes.resgatado)),
                         };
                         this.cards.push(card);
 
@@ -133,7 +140,7 @@ export default {
                 }
             } else if (this.typetext === 'Resgatados') {
                 for (let i = 0; i < this.cards.length; i++) {
-                    this.cards[i].show = (this.cards[i].resgatado === this.user.username) ;
+                    this.cards[i].show = (this.cards[i].resgatado === this.user.username);
                 }
             }
 
@@ -169,6 +176,69 @@ export default {
 
             });
         },
+
+        excluirSolicitacao(index) {
+            const info = {
+                "data": {
+                    "title": this.cards[index].title,
+                    "img": this.cards[index].img,
+                    "text": this.cards[index].text,
+                    "date": this.cards[index].original_date,
+                    "solicitado": null,
+                    "tipo": this.cards[index].tipo,
+                    "resgatado": null,
+                }
+            }
+
+
+            const req = fetch(`http://localhost:1337/api/items/${index + 1}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + this.user.jwt,
+                },
+                body: JSON.stringify(info),
+            }).then(async (response) => {
+                const data = await response.json();
+                console.log(data);
+                this.cards = [];
+                this.getItems();
+
+            });
+        },
+        excluirResgate(index) {
+            const info = {
+                "data": {
+                    "title": this.cards[index].title,
+                    "img": this.cards[index].img,
+                    "text": this.cards[index].text,
+                    "date": this.cards[index].original_date,
+                    "solicitado": this.cards[index].solicitado,
+                    "tipo": this.cards[index].tipo,
+                    "resgatado": null,
+                }
+            }
+
+
+            const req = fetch(`http://localhost:1337/api/items/${index + 1}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + this.user.jwt,
+                },
+                body: JSON.stringify(info),
+            }).then(async (response) => {
+                const data = await response.json();
+                console.log(data);
+                this.cards = [];
+                this.getItems();
+                setTimeout(() => {
+                    this.trocar(1);
+                }, 10);
+
+            });
+        },
+            
 
     },
     mounted() {
@@ -300,14 +370,31 @@ h1 {
     justify-content: space-between;
     align-items: center;
     align-content: center;
-    border: 1px solid black;
     width: 400px;
-    margin: auto;
     padding: 5px;
     border-radius: 0.25rem;
+    margin-top: 10px;
+    border: 1px solid black;
 }
 
 .admin-options p {
     margin: 0px;
+}
+
+.admin-btn-op {
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-btn-op button {
+    margin: 5px;
+
+}
+
+.card-body-admin {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
 }
 </style>
