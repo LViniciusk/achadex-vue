@@ -25,8 +25,10 @@
               <small class="text-muted">{{ card.date }}</small>
               <p v-if="card.resgatado" class=" m-0">Resgatado</p>
               <p v-if="!card.resgatado && card.solicitado" class="m-0">Solicitado</p>
+              <p v-if="!user && !card.resgatado && !card.solicitado" class="m-0">Disponível</p>
               <button v-if="!card.resgatado && !card.solicitado" v-show="user" @click="solicitarItem(index)"
                 class="btn btn-primary">Solicitar</button>
+              
             </div>
           </div>
         </div>
@@ -34,6 +36,8 @@
     </div>
   </div>
 </template>
+
+
 
 <script>
 export default {

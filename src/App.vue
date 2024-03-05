@@ -1,3 +1,5 @@
+
+
 <template>
   <div class="main-background">
     <Navbar :user="user" />
@@ -5,6 +7,8 @@
     <Footer />
   </div>
 </template>
+
+
 
 <script>
 import Navbar from './components/Navbar.vue'
@@ -40,7 +44,6 @@ export default {
 </script>
 
 <style>
-
 .main-background {
   background-color: #EAEBED;
 }
