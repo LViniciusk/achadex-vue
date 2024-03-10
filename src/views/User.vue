@@ -1,16 +1,16 @@
 <template>
     <div>
-        <div class="user-container" v-if="user">
+        <div class="user-container" v-if="us.user">
             <div class="profile-text">
                 <h1>Perfil de Usuario</h1>
             </div>
             <div class="profile-content">
                 <div class="profile-card">
-                    <div class="card profile" v-if="user">
-                        <img v-if="user" class="card-img-top profile-img" :src="user.img" alt="Foto de perfil">
+                    <div class="card profile" v-if="us.user">
+                        <img v-if="us.user" class="card-img-top profile-img" :src="us.user.img" alt="Foto de perfil">
                         <div class="card-body">
-                            <h5 v-if="user" class="card-title">{{ user.username }}</h5>
-                            <p v-if="user.role === 'Admin'" class="card-text">{{ user.role }}</p>
+                            <h5 v-if="us.user" class="card-title">{{ us.user.username }}</h5>
+                            <p v-if="us.user.role === 'Admin'" class="card-text">{{ us.user.role }}</p>
 
                         </div>
                         <div class="card-footer">
@@ -38,7 +38,7 @@
                                         <p>{{ card.text }}</p>
                                         <p>Data de encontro: {{ card.date }}</p>
                                     </div>
-                                    <div class="admin-options" v-if="(this.user.role === 'Admin')">
+                                    <div class="admin-options" v-if="(this.us.user.role === 'Admin')">
                                         <p v-if="(!card.resgatado)">Solicitado por: <strong>{{ card.solicitado
                                                 }}</strong></p>
                                         <p v-else>Resgatado por: <strong>{{ card.resgatado }}</strong></p>
@@ -64,6 +64,7 @@
 </template>
 
 <script>
+import { useUserStore } from '@/stores/UserStore';
 export default {
     name: 'User',
     data() {
@@ -71,14 +72,12 @@ export default {
             cards: [],
             type: ['Solicitados', 'Resgatados'],
             typetext: '',
+            us: useUserStore(),
         }
-    },
-    props: {
-        user: Object,
     },
     methods: {
         logout() {
-            this.$emit('logout');
+            this.us.setUser(null);
             localStorage.removeItem('user');
             this.$router.push('/');
         },
@@ -105,7 +104,7 @@ export default {
                             original_date: data.data[i].attributes.date,
                             tipo: data.data[i].attributes.tipo,
                             alt: 'Item Encontrado',
-                            show: ((data.data[i].attributes.solicitado === this.user.username && !data.data[i].attributes.resgatado) || (this.user.role === 'Admin' && data.data[i].attributes.solicitado && !data.data[i].attributes.resgatado)),
+                            show: ((data.data[i].attributes.solicitado === this.us.user.username && !data.data[i].attributes.resgatado) || (this.us.user.role === 'Admin' && data.data[i].attributes.solicitado && !data.data[i].attributes.resgatado)),
                         };
                         this.cards.push(card);
 
@@ -121,7 +120,7 @@ export default {
             });
             buttons[index].classList.add('clicked');
 
-            if (this.user.role === 'Admin') {
+            if (this.us.user.role === 'Admin') {
                 if (this.typetext === 'Solicitados') {
                     for (let i = 0; i < this.cards.length; i++) {
                         this.cards[i].show = (this.cards[i].solicitado && !this.cards[i].resgatado);
@@ -136,11 +135,11 @@ export default {
             }
             if (this.typetext === 'Solicitados') {
                 for (let i = 0; i < this.cards.length; i++) {
-                    this.cards[i].show = (this.cards[i].solicitado === this.user.username && !this.cards[i].resgatado);
+                    this.cards[i].show = (this.cards[i].solicitado === this.us.user.username && !this.cards[i].resgatado);
                 }
             } else if (this.typetext === 'Resgatados') {
                 for (let i = 0; i < this.cards.length; i++) {
-                    this.cards[i].show = (this.cards[i].resgatado === this.user.username);
+                    this.cards[i].show = (this.cards[i].resgatado === this.us.user.username);
                 }
             }
 
@@ -165,7 +164,7 @@ export default {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + this.user.jwt,
+                    'Authorization': 'Bearer ' + this.us.user.jwt,
                 },
                 body: JSON.stringify(info),
             }).then(async (response) => {
@@ -195,7 +194,7 @@ export default {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + this.user.jwt,
+                    'Authorization': 'Bearer ' + this.us.user.jwt,
                 },
                 body: JSON.stringify(info),
             }).then(async (response) => {
@@ -224,7 +223,7 @@ export default {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + this.user.jwt,
+                    'Authorization': 'Bearer ' + this.us.user.jwt,
                 },
                 body: JSON.stringify(info),
             }).then(async (response) => {
@@ -234,7 +233,7 @@ export default {
                 this.getItems();
                 setTimeout(() => {
                     this.trocar(1);
-                }, 10);
+                }, 50);
 
             });
         },
@@ -242,7 +241,7 @@ export default {
 
     },
     mounted() {
-        if (!this.user) {
+        if (!this.us.user) {
             this.$router.push('/login');
         }
         this.getItems()

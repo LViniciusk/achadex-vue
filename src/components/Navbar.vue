@@ -1,20 +1,18 @@
 <template>
     <nav>
         <router-link to="/" id="logo-url"><img src="/img/logo.png" alt="Logo" id="logo"></router-link>
-        <router-link v-if="user" to="/user" class="username "><div class="user-div"><img :src="user.img" class="user-img"><p>{{ user.username }}</p></div></router-link>
+        <router-link v-if="us.user" to="/user" class="username "><div class="user-div"><img :src="us.user.img" class="user-img"><p>{{ us.user.username }}</p></div></router-link>
         <router-link v-else to="/login" class="login-text"><div class="user-div"><i class="bi bi-person-circle "></i><p>Login</p></div></router-link>
     </nav>
 </template>
 
 <script>
+import { useUserStore } from '@/stores/UserStore';
 export default {
     name: 'Navbar',
-    props: {
-        user: Object,
-    },
     data() {
         return {
-
+            us: useUserStore(),
         }
     },
 }

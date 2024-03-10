@@ -2,8 +2,8 @@
 
 <template>
   <div class="main-background">
-    <Navbar :user="user" />
-    <router-view @logout="logout" @logar="(info) => login(info)" :user="user" />
+    <Navbar/>
+    <router-view/>
     <Footer />
   </div>
 </template>
@@ -13,7 +13,7 @@
 <script>
 import Navbar from './components/Navbar.vue'
 import Footer from './components/Footer.vue'
-
+import { useUserStore } from './stores/UserStore';
 
 export default {
   components: {
@@ -23,20 +23,12 @@ export default {
   name: 'App',
   data() {
     return {
-      user: null,
-    }
-  },
-  methods: {
-    logout() {
-      this.user = null;
-    },
-    login(info) {
-      this.user = info;
+      user: useUserStore(),
     }
   },
   mounted() {
     if (localStorage.getItem('user')) {
-      this.user = JSON.parse(localStorage.getItem('user'));
+      this.user.setUser(JSON.parse(localStorage.getItem('user')));
     }
   }
 }

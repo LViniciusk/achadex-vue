@@ -25,8 +25,8 @@
               <small class="text-muted">{{ card.date }}</small>
               <p v-if="card.resgatado" class=" m-0">Resgatado</p>
               <p v-if="!card.resgatado && card.solicitado" class="m-0">Solicitado</p>
-              <p v-if="!user && !card.resgatado && !card.solicitado" class="m-0">Disponível</p>
-              <button v-if="!card.resgatado && !card.solicitado" v-show="user" @click="solicitarItem(index)"
+              <p v-if="!us.user && !card.resgatado && !card.solicitado" class="m-0">Disponível</p>
+              <button v-if="!card.resgatado && !card.solicitado" v-show="us.user" @click="solicitarItem(index)"
                 class="btn btn-primary">Solicitar</button>
               
             </div>
@@ -40,15 +40,16 @@
 
 
 <script>
+import { useUserStore } from '@/stores/UserStore';
+
+
 export default {
   name: 'Home',
-  props: {
-    user: Object,
-  },
   data() {
     return {
       cards: [],
-      filters: []
+      filters: [],
+      us: useUserStore(),
 
     }
   },
@@ -60,7 +61,7 @@ export default {
           "img": this.cards[index].img,
           "text": this.cards[index].text,
           "date": this.cards[index].original_date,
-          "solicitado": this.user.username,
+          "solicitado": this.us.user.username,
           "tipo": this.cards[index].tipo,
           "resgatado": null,
         }
@@ -71,7 +72,7 @@ export default {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + this.user.jwt,
+          'Authorization': 'Bearer ' + this.us.user.jwt,
         },
         body: JSON.stringify(info),
       }).then(async (response) => {

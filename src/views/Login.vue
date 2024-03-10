@@ -40,19 +40,18 @@
 </template>
 
 <script>
+import { useUserStore } from '@/stores/UserStore';
 import Message from '../components/Message.vue'
 
 export default {
     name: 'Login',
-    props: {
-        user: Object,
-    },
     components: {
         Message,
     },
     data() {
         return {
             msg: '',
+            us: useUserStore(),
         }
     },
     methods: {
@@ -94,7 +93,7 @@ export default {
                         role: udata.role.name,
                     }
                     
-                    this.$emit('logar', info);
+                    this.us.setUser(info)
                     this.$router.push('/');
 
                     if(document.getElementById("remember").checked) localStorage.setItem('user', JSON.stringify(info));
