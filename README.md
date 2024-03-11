@@ -1,6 +1,6 @@
 # Achadex
 
-Uma loja online destinada a vendas de Mangás.
+Um site de achados e perdidos de um ambiente privado
 
 Para executar este projeto siga os passos descritos no arquivo [passo-a-passo](passo-a-passo.md)
 
@@ -22,17 +22,15 @@ Linyker Vinicius Gomes Barbosa, 556280, Ciencia da computação
 
 ## Principais funcionalidades da aplicação
 
-- Usuário não registrador poderão ver os mangá e os comentários feitos por usuários registrados.
-- Usuário registrador pode listar os mangás e seus detalhes, assim como usuários não registrados. 
-Adicionalmente, eles podem escrever comentários sobre os mangás.
-- O adminstrador da loja pode: adicionar, remover e editar os mangás.
+- Usuário não registrador poderá ver os itens encontrados e seu estado
+- Usuário registrador pode ver os itens e solicitar o resgate caso esteja disponivel alem de editar as informações do usuario
+- O adminstrador do site pode: Resgatar, cancelar o resgate e a solicitação de algum item
 
 ## Tecnologias e frameworks utilizados
 
 **Frontend:**
 
 - VueJS v3.0, Vue-Router e Pinia.
-- Axios
 
 **Backend:**
 
