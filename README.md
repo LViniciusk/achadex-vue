@@ -44,8 +44,8 @@ Adicionalmente, eles podem escrever comentários sobre os mangás.
 
 | Entidade| Criação | Leitura | Atualização | Remoção |
 | --- | --- | --- | --- | --- |
-| User |  |  | X |  |
-| Item | X  | X |  X | X |
+| User |  | X | X |  |
+| Item |   | X |  X |  |
 | Category |  |  X  |  |  |
 
 > Lembre-se que é necessário implementar o CRUD de pelo menos duas entidades.
@@ -56,6 +56,7 @@ Adicionalmente, eles podem escrever comentários sobre os mangás.
 | --- | --- |
 | POST | /auth/local |
 | GET | /users/me |
+| PUT | /user/me |
 | GET | /api/items |
 | PUT | /api/items/{id} |
 | GET | /api/categories |
