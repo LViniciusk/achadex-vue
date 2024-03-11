@@ -56,8 +56,8 @@ Adicionalmente, eles podem escrever comentários sobre os mangás.
 | --- | --- |
 | POST | /auth/local |
 | GET | /users/me |
-| GET | /api/mangas |
-| GET | /api/mangas/{id} |
-| POST | /api/mangas |
+| GET | /api/items |
+| PUT | /api/items/{id} |
+| GET | /api/categories |
 | PUT | /api/mangas/{id} |
 | DELETE | /api/mangas/{id} |

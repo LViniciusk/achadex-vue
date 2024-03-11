@@ -15,7 +15,7 @@
 
 
         <div class="card-columns">
-          <div class="card" v-for="(card, index) in cards" :key="index" v-show="card.show">
+          <div class="card" v-for="(card, index) in cards" :key="index" v-show="card.show && !card.resgatado">
             <img class="card-img-top" :src="card.img" :alt="card.alt">
             <div class="card-body">
               <h5 class="card-title">{{ card.title }}</h5>

@@ -1,5 +1,6 @@
 <template>
     <div>
+     <Modal/>
         <div class="user-container" v-if="us.user">
             <div class="profile-text">
                 <h1>Perfil de Usuario</h1>
@@ -14,7 +15,7 @@
 
                         </div>
                         <div class="card-footer">
-                            <button class="btn btn-primary">Editar Perfil</button>
+                            <button class="btn btn-primary" @click="abrirModal">Editar Perfil</button>
                             <button @click="logout">Logout</button>
                         </div>
                     </div>
@@ -53,7 +54,7 @@
                                     </div>
                                 </div>
                             </div>
-
+                            
                         </div>
                     </div>
                 </div>
@@ -65,8 +66,14 @@
 
 <script>
 import { useUserStore } from '@/stores/UserStore';
+import Modal from '@/components/Modal.vue';
+import $ from 'jquery';
+import 'bootstrap'
 export default {
     name: 'User',
+    components: {
+        Modal,
+    },
     data() {
         return {
             cards: [],
@@ -236,6 +243,9 @@ export default {
                 }, 50);
 
             });
+        },
+        abrirModal() {
+            $('#modal').modal('show')
         },
             
 
