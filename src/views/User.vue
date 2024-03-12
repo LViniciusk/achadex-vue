@@ -28,7 +28,7 @@
 
 
                     <div class="container">
-                        <div class="card extended" v-for="(card, index) in cards" :key="index" v-show="card.show">
+                        <div class="card extended" v-for="(card, index) in cards" :key="card.id" v-show="card.show">
                             <img class="card-extended-img" :src="card.img" :alt="card.alt">
                             <div class="card-body">
                                 <div class="card-title udl">
@@ -45,11 +45,11 @@
                                         <p v-else>Resgatado por: <strong>{{ card.resgatado }}</strong></p>
                                         <div class="admin-btn-op">
                                             <button v-show="!card.resgatado" class="btn btn-primary"
-                                                @click="resgatar(index)">Resgatar</button>
+                                                @click="resgatar(index, card.id)">Resgatar</button>
                                             <button v-show="!card.resgatado" class="btn btn-danger"
-                                                @click="excluirSolicitacao(index)">Excluir solicitação</button>
+                                                @click="excluirSolicitacao(index, card.id)">Excluir solicitação</button>
                                             <button v-show="card.resgatado" class="btn btn-danger"
-                                                @click="excluirResgate(index)">Cancelar resgate</button>
+                                                @click="excluirResgate(index, card.id)">Cancelar resgate</button>
                                         </div>
                                     </div>
                                 </div>
@@ -101,6 +101,7 @@ export default {
                     for (let i = 0; i < data.data.length; i++) {
 
                         const card = {
+                            id: data.data[i].id,
                             img: data.data[i].attributes.img,
                             title: data.data[i].attributes.title,
                             text: data.data[i].attributes.text,
@@ -152,7 +153,7 @@ export default {
 
 
         },
-        resgatar(index) {
+        resgatar(index, id) {
             const info = {
                 "data": {
                     "title": this.cards[index].title,
@@ -166,7 +167,7 @@ export default {
             }
 
 
-            const req = fetch(`http://localhost:1337/api/items/${index + 1}`, {
+            const req = fetch(`http://localhost:1337/api/items/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -182,7 +183,7 @@ export default {
             });
         },
 
-        excluirSolicitacao(index) {
+        excluirSolicitacao(index, id) {
             const info = {
                 "data": {
                     "title": this.cards[index].title,
@@ -196,7 +197,7 @@ export default {
             }
 
 
-            const req = fetch(`http://localhost:1337/api/items/${index + 1}`, {
+            const req = fetch(`http://localhost:1337/api/items/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -211,7 +212,7 @@ export default {
 
             });
         },
-        excluirResgate(index) {
+        excluirResgate(index, id) {
             const info = {
                 "data": {
                     "title": this.cards[index].title,
@@ -225,7 +226,7 @@ export default {
             }
 
 
-            const req = fetch(`http://localhost:1337/api/items/${index + 1}`, {
+            const req = fetch(`http://localhost:1337/api/items/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

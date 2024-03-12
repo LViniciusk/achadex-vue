@@ -415,7 +415,6 @@ export interface ApiItemItem extends Schema.CollectionType {
         maxLength: 156;
       }>;
     date: Attribute.Date & Attribute.Required;
-    img: Attribute.String & Attribute.Required;
     tipo: Attribute.String & Attribute.DefaultTo<'todos'>;
     solicitado: Attribute.String;
     resgatado: Attribute.String;
@@ -424,6 +423,7 @@ export interface ApiItemItem extends Schema.CollectionType {
       'oneToOne',
       'api::category.category'
     >;
+    img: Attribute.String & Attribute.Required;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<'api::item.item', 'oneToOne', 'admin::user'> &

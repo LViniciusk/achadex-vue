@@ -26,10 +26,6 @@
       "type": "date",
       "required": true
     },
-    "img": {
-      "type": "string",
-      "required": true
-    },
     "tipo": {
       "type": "string",
       "default": "todos"
@@ -44,6 +40,10 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::category.category"
+    },
+    "img": {
+      "type": "string",
+      "required": true
     }
   }
 }

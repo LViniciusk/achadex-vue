@@ -13,8 +13,8 @@
                                 class="form-control" id="last-name" placeholder=""> </div>
                         <div class="form-group"> <label for="inputEmail4">Categoria</label> <select class="form-control"
                                 v-model="category">
-                                <option v-for="(cat, index) in categories" :key="index" :value="index + 1">{{
-                            cat }}</option>
+                                <option v-for="(cat, index) in categories" :key="index" :value="cat">{{
+                            cat.nome }}</option>
                             </select></div>
                     </div>
                 </div>
@@ -23,6 +23,7 @@
                     <div class="col-md-12 col-lg-10 col-12">
                         <div class="form-group files"><label class="my-auto">Imagem </label>
                             <input @change="getImg" id="file" type="file" class="form-control" />
+                            <img :src="img" alt="Foto de perfil">
                         </div>
                     </div>
                 </div>
@@ -63,9 +64,12 @@ export default {
         async getCategories() {
             const req = await fetch('http://localhost:1337/api/categories');
             const res = await req.json();
-            let cat = '';
+            
             for (let i = 0; i < res.data.length; i++) {
-                cat = res.data[i].attributes.nome
+                let cat = {
+                    "id": res.data[i].id,
+                    "nome": res.data[i].attributes.nome
+                };
                 this.categories.push(cat);
             }
             console.log(this.categories);
@@ -79,21 +83,20 @@ export default {
             reader.readAsDataURL(file);
         },
         criarItem() {
+
             const item = {
                 "data": {
                     "title": this.title,
                     "date": this.data,
-                    "category": this.category,
                     "img": this.img,
                     "text": this.description,
-                    "tipo": this.category,
+                    "category": {"id": this.category.id},
+                    "tipo": this.category.nome,
                     "resgatado": null,
                     "solicitado": null,
                 }
-
             }
-            console.log(item);
-            const req = fetch('http://localhost:1337/api/items', {
+            const req = fetch('http://localhost:1337/api/items/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

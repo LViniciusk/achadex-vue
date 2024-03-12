@@ -126,7 +126,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .input-div {
     display: inline-block;
     margin-right: 10px;

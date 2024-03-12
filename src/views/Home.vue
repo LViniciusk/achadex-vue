@@ -15,7 +15,7 @@
 
 
         <div class="card-columns">
-          <div class="card" v-for="(card, index) in cards" :key="index" v-show="card.show && !card.resgatado">
+          <div class="card" v-for="(card, index) in cards" :key="card.id" v-show="card.show && !card.resgatado">
             <img class="card-img-top" :src="card.img" :alt="card.alt">
             <div class="card-body">
               <h5 class="card-title">{{ card.title }}</h5>
@@ -26,7 +26,8 @@
               <p v-if="card.resgatado" class=" m-0">Resgatado</p>
               <p v-if="!card.resgatado && card.solicitado" class="m-0">Solicitado</p>
               <p v-if="!us.user && !card.resgatado && !card.solicitado" class="m-0">Disponível</p>
-              <button v-if="!card.resgatado && !card.solicitado" v-show="us.user" @click="solicitarItem(index)"
+              <button class="btn btn-danger" v-if="us.user && us.user.role === 'Admin' && !card.solicitado" @click="deleteItem(card.id)"><i class="bi bi-trash"></i></button>
+              <button v-if="!card.resgatado && !card.solicitado" v-show="us.user" @click="solicitarItem(index, card.id)"
                 class="btn btn-primary">Solicitar</button>
               
             </div>
@@ -54,7 +55,23 @@ export default {
     }
   },
   methods: {
-    solicitarItem(index) {
+
+    deleteItem(id) {
+      const req = fetch(`http://localhost:1337/api/items/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + this.us.user.jwt,
+        },
+      }).then(async (response) => {
+        const data = await response.json();
+        console.log(data);
+        this.cards = [];
+        this.getItems();
+      });
+    },
+
+    solicitarItem(index, id) {
       const info = {
         "data": {
           "title": this.cards[index].title,
@@ -68,7 +85,7 @@ export default {
       }
 
 
-      const req = fetch(`http://localhost:1337/api/items/${index + 1}`, {
+      const req = fetch(`http://localhost:1337/api/items/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -84,7 +101,7 @@ export default {
       });
     },
     async getItems() {
-      const req = fetch('http://localhost:1337/api/items', {
+      const req = fetch('http://localhost:1337/api/items?populate=*', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -95,6 +112,7 @@ export default {
           console.log(data.data);
           for (let i = 0; i < data.data.length; i++) {
             const card = {
+              id: data.data[i].id,
               img: data.data[i].attributes.img,
               title: data.data[i].attributes.title,
               text: data.data[i].attributes.text,
@@ -183,7 +201,7 @@ export default {
   max-width: 1200px;
   min-height: 81vh;
   display: grid;
-  grid-template-columns: 25% 25% 25% 25%;
+  grid-template-columns: 23.65% 23.65% 23.65% 23.65%;
 
 
 }
