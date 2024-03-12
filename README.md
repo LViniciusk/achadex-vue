@@ -43,7 +43,7 @@ Linyker Vinicius Gomes Barbosa, 556280, Ciencia da computação
 | Entidade| Criação | Leitura | Atualização | Remoção |
 | --- | --- | --- | --- | --- |
 | User |  | X | X |  |
-| Item |   | X |  X |  |
+| Item | X | X |  X |  |
 | Category |  |  X  |  |  |
 
 > Lembre-se que é necessário implementar o CRUD de pelo menos duas entidades.
