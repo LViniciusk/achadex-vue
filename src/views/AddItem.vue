@@ -23,7 +23,7 @@
                     <div class="col-md-12 col-lg-10 col-12">
                         <div class="form-group files"><label class="my-auto">Imagem </label>
                             <input @change="getImg" id="file" type="file" class="form-control" />
-                            <img :src="img" alt="Foto de perfil">
+                            <img width="200px" v-if="this.img" :src="img" alt="Foto de perfil">
                         </div>
                     </div>
                 </div>
