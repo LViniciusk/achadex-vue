@@ -24,7 +24,7 @@ Linyker Vinicius Gomes Barbosa, 556280, Ciencia da computação
 
 - Usuário não registrador poderá ver os itens encontrados e seu estado
 - Usuário registrador pode ver os itens e solicitar o resgate caso esteja disponivel alem de editar as informações do usuario
-- O adminstrador do site pode: Resgatar, cancelar o resgate e a solicitação de algum item
+- O adminstrador do site pode: Adicionar, Excluir, Solicitar, Resgatar, cancelar o resgate e a solicitação de algum item, alem de editar suas informações
 
 ## Tecnologias e frameworks utilizados
 
@@ -58,5 +58,4 @@ Linyker Vinicius Gomes Barbosa, 556280, Ciencia da computação
 | GET | /api/items |
 | PUT | /api/items/{id} |
 | GET | /api/categories |
-| PUT | /api/mangas/{id} |
-| DELETE | /api/mangas/{id} |
+| DELETE | /api/items/{id} |
