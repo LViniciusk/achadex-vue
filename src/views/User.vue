@@ -68,7 +68,6 @@
 import { useUserStore } from '@/stores/UserStore';
 import Modal from '@/components/Modal.vue';
 import $ from 'jquery';
-import 'bootstrap'
 export default {
     name: 'User',
     components: {

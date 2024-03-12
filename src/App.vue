@@ -14,6 +14,7 @@
 import Navbar from './components/Navbar.vue'
 import Footer from './components/Footer.vue'
 import { useUserStore } from './stores/UserStore';
+import 'bootstrap'
 
 export default {
   components: {
