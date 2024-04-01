@@ -30,6 +30,19 @@
                     <a href="#!">Forgot password?</a>
                 </div>
             </div>
+            <div class="row mb-4">
+
+                <div class="col">
+                    <!-- Simple link -->
+                    <p>Não possui conta?</p>
+                </div>
+                <div class="col">
+                    <!-- Simple link -->
+                    
+                    <router-link to="/cadastro" ><a href="">Cadastre-se</a> </router-link>
+                </div>
+            </div>
+
 
             <!-- Submit button -->
             <button @click="logar" type="button" class="btn btn-primary btn-block mb-4">Sign in</button>
@@ -115,7 +128,7 @@ export default {
 
         }
     }, mounted() {
-        if (this.user) {
+        if (this.us.user) {
             this.$router.push('/');
         }
     },

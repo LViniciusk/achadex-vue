@@ -42,7 +42,7 @@ Linyker Vinicius Gomes Barbosa, 556280, Ciencia da computação
 
 | Entidade| Criação | Leitura | Atualização | Remoção |
 | --- | --- | --- | --- | --- |
-| User |  | X | X |  |
+| User | X | X | X |  |
 | Item | X | X |  X | X |
 | Category |  |  X  |  |  |
 
