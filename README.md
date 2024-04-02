@@ -63,4 +63,4 @@ Linyker Vinicius Gomes Barbosa, 556280, Ciencia da computação
 
 
 
-Site: http://achadex.wuaze.com/
+Site: https://achadex.wuaze.com/
