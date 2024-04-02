@@ -7,8 +7,8 @@
           <div><button class="btn btn-small btn-primary data-filter-item todos clicked"
               @click="checkFilter(0, 'todos')">Todos</button></div>
           <div>
-            <button v-for="(filter, index) in filters" :key="index" @click="checkFilter(index + 1, filter)"
-              class="btn btn-small btn-primary data-filter-item">{{ filter }}</button>
+            <button v-for="(filter, index) in filters" :key="filter.id" @click="checkFilter(index + 1, filter.name)"
+              class="btn btn-small btn-primary data-filter-item">{{ filter.name }}</button>
           </div>
         </div>
 
@@ -140,7 +140,10 @@ export default {
           const data = await response.json();
           console.log(data.data);
           for (let i = 0; i < data.data.length; i++) {
-            const category = data.data[i].attributes.nome;
+            const category = {
+              id: data.data[i].id,
+              name: data.data[i].attributes.nome,
+            }
             this.filters.push(category);
           }
         }
@@ -161,7 +164,7 @@ export default {
         return;
       }
       for (let i = 0; i < this.cards.length; i++) {
-        if (this.cards[i].tipo !== filter) {
+        if (this.cards[i].tipo.toLowerCase() !== filter) {
           this.cards[i].show = false;
         } else {
           this.cards[i].show = true;
