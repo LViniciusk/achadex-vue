@@ -4,7 +4,7 @@
   <div class="main-background">
     <Navbar/>
     <router-view/>
-    <Footer />
+    <Footer/>
   </div>
 </template>
 
