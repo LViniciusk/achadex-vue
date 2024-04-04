@@ -53,6 +53,7 @@ Linyker Vinicius Gomes Barbosa, 556280, Ciencia da computação
 | Método HTTP | URL |
 | --- | --- |
 | POST | /auth/local |
+| POST | /auth/local/register |
 | GET | /users/me |
 | PUT | /user/me |
 | GET | /api/items |
