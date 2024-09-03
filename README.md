@@ -64,5 +64,9 @@ Linyker Vinicius Gomes Barbosa, 556280, Ciencia da computação
 
 
 
+-- Login Strapi --
+    email: jogas@gmail.com
+    senha: Achadexvue2
 
+    
 Site: https://achadex.wuaze.com/
