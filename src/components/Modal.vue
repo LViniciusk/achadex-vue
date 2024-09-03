@@ -29,8 +29,11 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" @click="deletarPerfil">Excluir
+                        Conta</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" @click="editarPerfil">Salvar Alterações</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" @click="editarPerfil">Salvar
+                        Alterações</button>
                 </div>
             </div>
         </div>
@@ -64,6 +67,23 @@ export default {
             }
             reader.readAsDataURL(file);
         },
+        deletarPerfil() {
+            const req = fetch(`http://localhost:1337/api/user/me`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + this.us.user.jwt,
+                },
+            }).then(async (response) => {
+                if (response.status === 200) {
+                    this.reset();
+                    this.us.setUser(null);
+                    localStorage.removeItem('user');
+                    this.$router.push('/');
+                }
+            });
+
+        },
         editarPerfil() {
             if (this.username == this.us.user.username && this.email == this.us.user.email && this.img == this.us.user.img) {
                 this.reset();
@@ -71,10 +91,10 @@ export default {
             }
 
             const data = {
-                    img: this.img,
-                    username: this.username,
-                    email: this.email,
-                
+                img: this.img,
+                username: this.username,
+                email: this.email,
+
             }
             const req = fetch(`http://localhost:1337/api/user/me`, {
                 method: 'PUT',

@@ -42,7 +42,7 @@ Linyker Vinicius Gomes Barbosa, 556280, Ciencia da computação
 
 | Entidade| Criação | Leitura | Atualização | Remoção |
 | --- | --- | --- | --- | --- |
-| User | X | X | X |  |
+| User | X | X | X | X |
 | Item | X | X |  X | X |
 | Category |  |  X  |  |  |
 
@@ -52,14 +52,15 @@ Linyker Vinicius Gomes Barbosa, 556280, Ciencia da computação
 
 | Método HTTP | URL |
 | --- | --- |
-| POST | /auth/local |
-| POST | /auth/local/register |
-| GET | /users/me |
-| PUT | /user/me |
+| POST | api/auth/local |
+| POST | api/auth/local/register |
+| GET | api/users/me |
+| PUT | api/user/me |
 | GET | /api/items |
 | PUT | /api/items/{id} |
 | GET | /api/categories |
 | DELETE | /api/items/{id} |
+| DELETE | api/user/me/ |
 
 
 

@@ -11,6 +11,18 @@ module.exports = (plugin) => {
         })
     }
 
+    plugin.controllers.user.deleteMe = async (ctx) => {
+        if (!ctx.state.user || !ctx.state.user.id) {
+            return ctx.response.status = 401;
+        }
+        await strapi.query('plugin::users-permissions.user').delete({
+            where: { id: ctx.state.user.id }
+        }).then((res) => {
+            ctx.response.status = 200;
+        })
+    }
+
+
     plugin.routes['content-api'].routes.push(
         {
             method: "PUT",
@@ -20,7 +32,16 @@ module.exports = (plugin) => {
                 prefix: "",
                 policies: []
             }
-        }
+        },
+        {
+            method: "DELETE",
+            path: "/user/me",
+            handler: "user.deleteMe",
+            config: {
+                prefix: "",
+                policies: []
+            }
+        },
     )
 
     return plugin;
