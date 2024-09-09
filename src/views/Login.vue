@@ -5,13 +5,13 @@
         <form>
             <!-- Email input -->
             <div class="form-outline mb-4">
-                <input v-model="email" type="email" id="email" class="form-control" />
+                <input v-model="email" type="email" id="email" class="form-control" required/>
                 <label class="form-label" for="email">Email address</label>
             </div>
 
             <!-- Password input -->
             <div class="form-outline mb-4">
-                <input v-model="senha" type="password" id="pass" class="form-control" />
+                <input v-model="senha" type="password" id="pass" class="form-control" required/>
                 <label class="form-label" for="pass">Password</label>
             </div>
 
@@ -27,7 +27,7 @@
 
                 <div class="col">
                     <!-- Simple link -->
-                    <a href="#!">Forgot password?</a>
+                    <a style="visibility: hidden;" href="#!">Forgot password?</a>
                 </div>
             </div>
             <div class="row mb-4">

@@ -2,7 +2,7 @@
     <div class="cadastro-div">
         <Message :msg="msg" v-show="msg" />
         <h1 class="text-center">Cadastro</h1>
-        <form>
+        <form @submit.prevent="cadastrar">
 
             <div class="card-img-top profile-img-modal">
                 <label for="pic-input">
@@ -13,25 +13,25 @@
 
             <!-- Username input -->
             <div class="form-outline mb-4">
-                <input v-model="usuario" type="text" id="username" class="form-control" />
+                <input v-model="usuario" type="text" id="username" class="form-control" required/>
                 <label class="form-label" for="email">Username</label>
             </div>
 
             <!-- Email input -->
             <div class="form-outline mb-4">
-                <input v-model="email" type="email" id="email" class="form-control" />
+                <input v-model="email" type="email" id="email" class="form-control" required/>
                 <label class="form-label" for="email">Email address</label>
             </div>
 
             <!-- Password input -->
             <div class="form-outline mb-4">
-                <input v-model="senha" type="password" id="pass" class="form-control" />
+                <input v-model="senha" type="password" id="pass" class="form-control" required minlength="6"/>
                 <label class="form-label" for="pass">Password</label>
             </div>
 
 
             <!-- Submit button -->
-            <button @click="cadastrar" type="button" class="btn btn-primary btn-block mb-4">Cadastrar</button>
+            <button type="submit" class="btn btn-primary btn-block mb-4">Cadastrar</button>
 
 
         </form>
@@ -59,7 +59,7 @@ export default {
     },
     methods: {
         async cadastrar(){
-
+            
             const data = {
                 "username": this.usuario,
                 "email": this.email,

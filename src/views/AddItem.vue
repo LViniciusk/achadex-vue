@@ -5,12 +5,12 @@
                 <div class="row justify-content-center">
                     <div class="col-lg-5 col-md-6 col-sm-12">
                         <div class="form-group"><label for="first-name">Titulo</label><input v-model="title" type="text"
-                                class="form-control" id="first-name" placeholder="Nome do item"> </div>
+                                class="form-control" id="first-name" placeholder="Nome do item" required> </div>
 
                     </div>
                     <div class="col-lg-5 col-md-6 col-sm-12">
                         <div class="form-group"> <label for="last-name">Data</label> <input v-model="data" type="date"
-                                class="form-control" id="last-name" placeholder=""> </div>
+                                class="form-control" id="last-name" placeholder="" required> </div>
                         <div class="form-group"> <label for="inputEmail4">Categoria</label> <select class="form-control"
                                 v-model="category">
                                 <option v-for="(cat, index) in categories" :key="index" :value="cat">{{
@@ -22,7 +22,7 @@
                 <div class="row justify-content-center">
                     <div class="col-md-12 col-lg-10 col-12">
                         <div class="form-group files"><label class="my-auto">Imagem </label>
-                            <input @change="getImg" id="file" type="file" class="form-control" />
+                            <input @change="getImg" id="file" type="file" class="form-control" required/>
                             <img width="200px" v-if="this.img" :src="img" alt="Foto de perfil">
                         </div>
                     </div>
