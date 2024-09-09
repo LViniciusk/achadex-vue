@@ -68,5 +68,9 @@ Linyker Vinicius Gomes Barbosa, 556280, Ciencia da computação
     email: jogas@gmail.com
     senha: Achadexvue2
 
+-- Admin Account -- 
+    email: jogas@gmail.com 
+    senha: 123456
+
     
 Site: https://achadex.wuaze.com/
