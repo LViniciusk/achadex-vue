@@ -251,9 +251,6 @@ export default {
 
     },
     mounted() {
-        if (!this.us.user) {
-            this.$router.push('/login');
-        }
         this.getItems()
         this.trocar(0);
 

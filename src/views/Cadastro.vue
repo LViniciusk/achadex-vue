@@ -161,10 +161,6 @@ export default {
             }
             reader.readAsDataURL(file);
         },
-    }, mounted() {
-        if (this.us.user) {
-            this.$router.push('/');
-        }
     },
 
 }

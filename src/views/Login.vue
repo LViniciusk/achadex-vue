@@ -20,7 +20,7 @@
                 <div class="col d-flex justify-content-center">
                     <!-- Checkbox -->
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="remember" checked />
+                        <input v-model="rememberMe" class="form-check-input" type="checkbox" id="remember" />
                         <label class="form-check-label" for="remember"> Remember me </label>
                     </div>
                 </div>
@@ -30,24 +30,20 @@
                     <a style="visibility: hidden;" href="#!">Forgot password?</a>
                 </div>
             </div>
-            <div class="row mb-4">
 
+            <div class="row mb-4">
                 <div class="col">
                     <!-- Simple link -->
                     <p>Não possui conta?</p>
                 </div>
                 <div class="col">
                     <!-- Simple link -->
-                    
-                    <router-link to="/cadastro" ><a href="">Cadastre-se</a> </router-link>
+                    <router-link to="/cadastro"><a href="">Cadastre-se</a></router-link>
                 </div>
             </div>
 
-
             <!-- Submit button -->
             <button @click="logar" type="button" class="btn btn-primary btn-block mb-4">Sign in</button>
-
-
         </form>
     </div>
 </template>
@@ -63,6 +59,9 @@ export default {
     },
     data() {
         return {
+            email: '',
+            senha: '',
+            rememberMe: true, 
             msg: '',
             us: useUserStore(),
         }
@@ -77,25 +76,21 @@ export default {
                 body: JSON.stringify({
                     "identifier": this.email,
                     "password": this.senha,
-                    
-                    
                 }),
             }).then(async (response) => {
                 if (response.status === 200) {
+                    const data = await response.json();
+                    console.log(data);
 
-                    const data = await response.json()
-                    console.log(data)
                     const req = await fetch('http://localhost:1337/api/users/me?populate=role', {
                         method: 'GET',
                         headers: {
                             'Content-Type': 'application/json',
                             'Authorization': 'Bearer ' + data.jwt,
                         },
-                    })
-                    const udata = await req.json()
-                    console.log(udata)
-
-
+                    });
+                    const udata = await req.json();
+                    console.log(udata);
 
                     const info = {
                         email: data.user.email,
@@ -104,35 +99,33 @@ export default {
                         jwt: data.jwt,
                         img: data.user.img,
                         role: udata.role.name,
-                    }
-                    
-                    this.us.setUser(info)
+                    };
+
+                    this.us.setUser(info);
                     this.$router.push('/');
 
-                    if(document.getElementById("remember").checked) localStorage.setItem('user', JSON.stringify(info));
+                    if (this.rememberMe) {
+                        localStorage.setItem('user', JSON.stringify(info));
+                    }
                     
-                    
-                } else if(response.status === 400) {
-                    this.email = ''
-                    this.senha = ''
-                    this.msg = 'Usuario ou senha invalidos'
+                } else if (response.status === 400) {
+                    this.email = '';
+                    this.senha = '';
+                    this.msg = 'Usuário ou senha inválidos';
                     setTimeout(() => {
-                        this.msg = ''
+                        this.msg = '';
                     }, 5000);
-
-                }else{
-                    console.log('Erro desconhecido')
+                } else {
+                    console.log('Erro desconhecido');
                 }
             });
-            
-
         }
-    }, mounted() {
+    },
+    mounted() {
         if (this.us.user) {
             this.$router.push('/');
         }
     },
-
 }
 </script>
 

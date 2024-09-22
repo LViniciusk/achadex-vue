@@ -4,18 +4,22 @@
       <h1 class="text-center">Itens encontrados</h1>
       <div class="retangulo">
         <div class="data-filter">
-          <div><button class="btn btn-small btn-primary data-filter-item todos clicked"
-              @click="checkFilter(0, 'todos')">Todos</button></div>
           <div>
-            <button v-for="(filter, index) in filters" :key="filter.id" @click="checkFilter(index + 1, filter.name)"
-              class="btn btn-small btn-primary data-filter-item">{{ filter.name }}</button>
+            <button class="btn btn-small btn-primary data-filter-item" :class="{ clicked: selectedFilter === 'todos' }"
+              @click="selectedFilter = 'todos'">
+              Todos
+            </button>
+          </div>
+          <div>
+            <button v-for="filter in filters" :key="filter.id" @click="selectedFilter = filter.name"
+              class="btn btn-small btn-primary data-filter-item" :class="{ clicked: selectedFilter === filter.name }">
+              {{ filter.name }}
+            </button>
           </div>
         </div>
 
-
-
         <div class="card-columns">
-          <div class="card" v-for="(card, index) in cards" :key="card.id" v-show="card.show && !card.resgatado">
+          <div class="card" v-for="(card, index) in filteredCards" :key="card.id">
             <img class="card-img-top" :src="card.img" :alt="card.alt">
             <div class="card-body">
               <h5 class="card-title">{{ card.title }}</h5>
@@ -23,13 +27,17 @@
             </div>
             <div class="card-footer">
               <small class="text-muted">{{ card.date }}</small>
-              <p v-if="card.resgatado" class=" m-0">Resgatado</p>
+              <p v-if="card.resgatado" class="m-0">Resgatado</p>
               <p v-if="!card.resgatado && card.solicitado" class="m-0">Solicitado</p>
               <p v-if="!us.user && !card.resgatado && !card.solicitado" class="m-0">Disponível</p>
-              <button class="btn btn-danger" v-if="us.user && us.user.role === 'Admin' && !card.solicitado" @click="deleteItem(card.id)"><i class="bi bi-trash"></i></button>
+              <button class="btn btn-danger" v-if="us.user && us.user.role === 'Admin' && !card.solicitado"
+                @click="deleteItem(card.id)">
+                <i class="bi bi-trash"></i>
+              </button>
               <button v-if="!card.resgatado && !card.solicitado" v-show="us.user" @click="solicitarItem(index, card.id)"
-                class="btn btn-primary">Solicitar</button>
-              
+                class="btn btn-primary">
+                Solicitar
+              </button>
             </div>
           </div>
         </div>
@@ -38,11 +46,8 @@
   </div>
 </template>
 
-
-
 <script>
 import { useUserStore } from '@/stores/UserStore';
-
 
 export default {
   name: 'Home',
@@ -50,14 +55,24 @@ export default {
     return {
       cards: [],
       filters: [],
+      selectedFilter: 'todos',
       us: useUserStore(),
-
+    };
+  },
+  computed: {
+    filteredCards() {
+      if (this.selectedFilter === 'todos') {
+        return this.cards.filter(card => !card.resgatado);
+      } else {
+        return this.cards.filter(
+          card => card.tipo.toLowerCase() === this.selectedFilter.toLowerCase() && !card.resgatado
+        );
+      }
     }
   },
   methods: {
-
     deleteItem(id) {
-      const req = fetch(`http://localhost:1337/api/items/${id}`, {
+      fetch(`http://localhost:1337/api/items/${id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -73,19 +88,18 @@ export default {
 
     solicitarItem(index, id) {
       const info = {
-        "data": {
-          "title": this.cards[index].title,
-          "img": this.cards[index].img,
-          "text": this.cards[index].text,
-          "date": this.cards[index].original_date,
-          "solicitado": this.us.user.username,
-          "tipo": this.cards[index].tipo,
-          "resgatado": null,
-        }
-      }
+        data: {
+          title: this.cards[index].title,
+          img: this.cards[index].img,
+          text: this.cards[index].text,
+          date: this.cards[index].original_date,
+          solicitado: this.us.user.username,
+          tipo: this.cards[index].tipo,
+          resgatado: null,
+        },
+      };
 
-
-      const req = fetch(`http://localhost:1337/api/items/${id}`, {
+      fetch(`http://localhost:1337/api/items/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -97,9 +111,9 @@ export default {
         console.log(data);
         this.cards = [];
         this.getItems();
-
       });
     },
+
     async getItems() {
       const req = fetch('http://localhost:1337/api/items?populate=*', {
         method: 'GET',
@@ -129,8 +143,9 @@ export default {
           }
         }
       });
+
       this.filters = [];
-      const Creq = fetch('http://localhost:1337/api/categories', {
+      fetch('http://localhost:1337/api/categories', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -143,41 +158,19 @@ export default {
             const category = {
               id: data.data[i].id,
               name: data.data[i].attributes.nome,
-            }
+            };
             this.filters.push(category);
           }
         }
       });
-
     },
-    checkFilter(index, filter) {
-      filter = filter.toLowerCase();
-      const buttons = document.querySelectorAll('.data-filter-item');
-      buttons.forEach((button) => {
-        button.classList.remove('clicked');
-      });
-      buttons[index].classList.add('clicked');
-      if (filter === 'todos') {
-        for (let i = 0; i < this.cards.length; i++) {
-          this.cards[i].show = true;
-        }
-        return;
-      }
-      for (let i = 0; i < this.cards.length; i++) {
-        if (this.cards[i].tipo.toLowerCase() !== filter) {
-          this.cards[i].show = false;
-        } else {
-          this.cards[i].show = true;
-
-        }
-      }
-    }
   },
   mounted() {
     this.getItems();
-  }
-}
+  },
+};
 </script>
+
 
 <style scoped>
 .home-nav {
